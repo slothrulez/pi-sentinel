@@ -15,7 +15,7 @@
 |---|---|---|
 | M0.1 repository/tooling/full guide review | Completed (inspection only) | Text of all pages; six contact sheets cover all 23 rendered pages, full-resolution pp. 1/17/18 checked; guide hash recorded. |
 | M0.2 six requested documents + persistent instructions | Completed (planning documents only) | Inventory/plan/status/architecture/security/README/traceability and AGENTS.md; not application completion. |
-| M0.3 consistency audit/Git checkpoint | Audit completed; local checkpoint pending | 29 document checks passed; staged whitespace/Git review and commit follow; approval still required before M1. |
+| M0.3 consistency audit/Git checkpoint | Completed (local planning only) | 29 audit checks and staged whitespace review PASS; initial planning commit `3c7e5f9` inspected, working tree clean afterward. Owner approval still required before M1. |
 | Read-only target inventory | Blocked: authentication | Strict batch SSH exited 255, permission denied; no remote command ran. Owner authorized access/inventory needed. |
 | M1 local config/evidence foundation | Not started; blocked on review | First implementation; acceptance in PROJECT_PLAN M1. |
 | M2 real decoys/collection | Not started | M1 and approved topology/sensor/library A01-A03. |
@@ -70,8 +70,12 @@ Security risks: hostile SSH/HTTP parsers, accidental sensitive capture, pivoting
 
 ## Completion accounting
 
-PS-U01 planning documents and the 29-check consistency audit are complete; the local Git checkpoint is recorded below when executed. Owner review/approval is still pending. All application requirements remain not implemented/not tested. A local planning Git checkpoint is not an independent backup, release tag, Pi deployment or completed research requirement. No push authorized. Phase 1 ends with owner review, not automatic progression.
+PS-U01 planning documents and the 29-check consistency audit are complete; the executed local Git checkpoint is recorded below. Owner review/approval is still pending. All application requirements remain not implemented/not tested. A local planning Git checkpoint is not an independent backup, release tag, Pi deployment or completed research requirement. No push authorized. Phase 1 ends with owner review, not automatic progression.
 
 ## Audit tooling recovery
 
 The first audit invocation had a Python quoting syntax error and did not execute checks. The next audit found its own incorrect assumption that optional and core tables had identical column counts. Corrected validator uses their distinct four/five/six-column contracts; final inspected run passed all 29 checks. No failed application test was hidden: none exists yet.
+
+## Executed Git checkpoint
+
+Initial planning checkpoint: `3c7e5f93856fc8c024bf3bc00b3fab8146546879` — guide + six requested documents + AGENTS.md. Commit succeeded; inspected `git status --short --branch` showed clean `main` afterward. No push/tag/remote backup/deployment occurred. This follow-up status record documents the actual result; Git history identifies the status-record commit separately.
