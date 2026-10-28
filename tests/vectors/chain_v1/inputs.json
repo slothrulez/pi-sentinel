@@ -1,0 +1,79 @@
+{
+  "inputs": [
+    {
+      "chain_format": "pisentinel.chain.v1",
+      "case_id": "CASE-VEC",
+      "sequence": 1,
+      "record_type": "observation",
+      "event_id": "EVT-000231",
+      "recorded_at": "2026-09-16T08:52:02.000000Z",
+      "body": {
+        "schema_version": "pisentinel.event.v1",
+        "event_id": "EVT-000231",
+        "timestamp": "2026-09-16T14:22:01+05:30",
+        "timestamp_utc": "2026-09-16T08:52:01.000000Z",
+        "source_ip": "10.10.0.20",
+        "destination_service": "ssh",
+        "event_type": "auth_failure",
+        "action": "login_attempt",
+        "metadata": {
+          "username": "admin"
+        },
+        "session_id": "S-014",
+        "severity": "medium",
+        "discarded_sensitive_values": 0
+      }
+    },
+    {
+      "chain_format": "pisentinel.chain.v1",
+      "case_id": "CASE-VEC",
+      "sequence": 2,
+      "record_type": "observation",
+      "event_id": "EVT-000232",
+      "recorded_at": "2026-09-16T08:52:03.000000Z",
+      "body": {
+        "schema_version": "pisentinel.event.v1",
+        "event_id": "EVT-000232",
+        "timestamp": "2026-09-16T08:52:02Z",
+        "timestamp_utc": "2026-09-16T08:52:02.000000Z",
+        "source_ip": "2001:db8::20",
+        "destination_service": "http",
+        "event_type": "http_request",
+        "action": "get_path",
+        "metadata": {
+          "path": "/caf\u00e9/\u65e5\u672c/\ud83d\ude00",
+          "tab_newline": "a\tb\nc\u0001\u001f\"\\/\u007f\u2028",
+          "empty_list": [],
+          "empty_obj": {},
+          "flags": [
+            true,
+            false,
+            null
+          ],
+          "neg": -9007199254740991,
+          "zero": 0
+        },
+        "discarded_sensitive_values": 1
+      }
+    },
+    {
+      "chain_format": "pisentinel.chain.v1",
+      "case_id": "CASE-VEC",
+      "sequence": 3,
+      "record_type": "assessment",
+      "event_id": "REC-0003",
+      "recorded_at": "2026-09-16T08:52:04.000000Z",
+      "body": {
+        "schema_version": "pisentinel.derived.v1",
+        "refers_to": [
+          "EVT-000231",
+          "EVT-000232"
+        ],
+        "data": {
+          "model_label": "credential_attack"
+        },
+        "discarded_sensitive_values": 0
+      }
+    }
+  ]
+}
