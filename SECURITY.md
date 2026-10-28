@@ -23,6 +23,8 @@ Local root/admin/kernel/hardware compromise and proof of real attacker intent ar
 
 ## 2. Evidence claims and privacy
 
+M1 implementation status and tested negative guarantees (tail truncation, full-chain recomputation, trigger bypass): [docs/EVIDENCE_CHAIN.md](docs/EVIDENCE_CHAIN.md#limitations-do-not-overstate).
+
 A SHA-256 chain detects inconsistent record/link changes **relative to the retained chain/checkpoint**. It is not encryption, access control, signature, immutable storage, completeness/origin proof or legal admissibility. A privileged adversary can recompute an entire unkeyed chain; tail truncation needs independently retained expected count/head. A checkpoint stored beside the DB is not independent. Never silently repair originals; label failed/unverified evidence in UI/exports/report. See ARCHITECTURE proposed format and limitation tests.
 
 Persist privacy-filtered raw normalized observations before enrichment, with ingest sequence/source timestamps and clock-skew caveats. Keep model/SHAP/policy/AI separately versioned and linked; AI hypotheses are not facts. Restrict evidence/export/backup permissions. Owner must approve retention/case limits/disk budget (A13). No actual password/key/token/cookie/production data in Git or evidence. Runtime secrets in environment or protected files excluded from Git; secret-free examples only. M1 must add project-appropriate ignore/secret-scan rules before runtime data exists.

@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools==84.0.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pisentinel"
+version = "0.1.0.dev0"
+description = "PiSentinel M1: bounded configuration, Event schema and tamper-evident SQLite evidence chain"
+readme = "README.md"
+requires-python = ">=3.10"
+# The M1 evidence core (config, schema, writer, verifier) uses the standard library only.
+dependencies = []
+
+[project.optional-dependencies]
+api = ["fastapi==0.141.1"]
+test = ["pytest==9.1.1", "httpx==0.28.1"]
+lint = ["ruff==0.16.9"]
+
+[project.scripts]
+pisentinel-verify-evidence = "pisentinel.edge.evidence.verify:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-ra --strict-markers"
+markers = ["slow: multi-process crash/concurrency tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "S", "UP", "I"]
+ignore = ["S101", "S603", "S608"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S105", "S106", "S108", "S110", "S311", "S607", "B017"]

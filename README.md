@@ -6,7 +6,7 @@ Authorized defensive research loop: observe controlled SSH/web/network interacti
 
 ## Current state
 
-**Phase 1 planning only. No application, decoy, API, model, dashboard, installer or project test suite is implemented. No measured detection/evaluation/resource results exist.** Complete 23-page `PiSentinel-Master-Guide.pdf`, including diagrams/tables/appendices, reviewed. Owner approval required before M1 coding.
+**M1 (configuration + evidence foundation) is implemented and tested on Linux; nothing from M2 onward (decoys, models, dashboard, installer) exists. No measured detection/evaluation/resource results exist.** Complete 23-page `PiSentinel-Master-Guide.pdf`, including diagrams/tables/appendices, reviewed. Owner approval required before M1 coding.
 
 Target: Raspberry Pi 4 / 2 GB. Development: Windows. Supplied Pi hostname/user/address: `sentinel`, `pisentinel`, `192.168.1.3`. Read-only SSH inventory authentication failed; OS/storage/packages/resource headroom unknown. No remote inventory/test/install/configuration change ran.
 
@@ -19,23 +19,20 @@ Target: Raspberry Pi 4 / 2 GB. Development: Windows. Supplied Pi hostname/user/a
 - [Requirements traceability](docs/REQUIREMENTS_TRACEABILITY.md): stable IDs/sources/planned tests/actual evidence.
 - [Persistent project instructions](AGENTS.md): safe contribution and verification conventions.
 
-## Initial setup — inspect, do not install yet
+## Development setup (M1)
 
-Planning documents need no application dependencies. From PowerShell in this existing repository:
+Requires [uv](https://docs.astral.sh/uv/) and Python 3.10+. Dependencies are pinned in `pyproject.toml` and locked in `uv.lock`; the evidence core uses only the standard library.
 
-```powershell
-Get-ChildItem -Force
-git status --short --branch
-python --version
-git --version
-ssh -V
-Get-FileHash .\PiSentinel-Master-Guide.pdf -Algorithm SHA256
+```sh
+uv sync --all-extras          # create .venv from the lock file
+uv run pytest -q              # unit, integration, security tests
+uv run ruff check src tests
+uv run python -m pisentinel.edge.evidence.verify --db data/cases/pisentinel.sqlite3
 ```
 
-Expected guide SHA-256: `a5cde730f8d99d615e017fe15d138c1e6962b634b2cad5a06b9248e0e46e20ea`.
-Inspected local Python: 3.12.6 (**not yet an approved Pi runtime**). Git 2.46.0.windows.1, OpenSSH 9.8p1, `pdftotext` available; pytest importable but no project tests exist. Ripgrep unavailable; use file listings/Python/search alternatives. No tooling install needed for plan review.
+Configuration: copy `.env.example` to `.env` (git-ignored); see `src/pisentinel/config.py`. Evidence databases live under `data/` (git-ignored). Chain format and limitations: [docs/EVIDENCE_CHAIN.md](docs/EVIDENCE_CHAIN.md). No network service is started by any M1 code.
 
-No `pyproject.toml`, dependency lock, `.env.example`, application/start command or install script exists yet. Do not run invented `pip install -r ...` or deployment commands. After approval M1 adds reproducible packaging/config/SQLite/Event/chain/verifier/real in-process health tests and reviewed pinned dependency groups. Record exact setup/test commands from actual execution, not guesses. Keep runtime secrets/case data out of Git.
+Expected guide SHA-256: `a5cde730f8d99d615e017fe15d138c1e6962b634b2cad5a06b9248e0e46e20ea`.
 
 ## Pi access and authorization
 
@@ -45,7 +42,7 @@ No package, firewall/system setting, service, IP or listener binding changed. Fu
 
 ## Next increment
 
-**M1 — local configuration and immutable evidence foundation, after plan review.** Acceptance: bounded secret-safe config/Event schema; durable atomic SQLite append; deterministic SHA-256 chain/independent verifier; deliberate corruption/concurrency/crash tests; raw-before-enrichment; actual health failures tested in-process; honest chain limits. No Pi modification or network exposure required.
+**M2 — real decoys/collection, requires separate owner approval and A01-A03 decisions.** M1 delivered: bounded secret-safe config/Event schema; durable atomic SQLite append; deterministic SHA-256 chain/independent verifier; deliberate corruption/concurrency/crash tests; raw-before-enrichment; actual health failures tested in-process; honest chain limits. No Pi modification or network exposure required.
 
 ## Scientific/security limits
 

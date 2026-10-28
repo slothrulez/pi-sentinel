@@ -76,6 +76,8 @@ Initial limits proposed for M1/M2 review, not guide values/tested capacity: 16 K
 
 ### Hash-chain format (A09; review/freeze/test at M1)
 
+M1 implemented this as chain format v1; exact rules, vectors and tested limits: [docs/EVIDENCE_CHAIN.md](docs/EVIDENCE_CHAIN.md).
+
 Per bounded collection case/run, one writer assigns strictly increasing durable sequences. Concurrent sessions may share a case. Case time/size limits and closure/rotation never imply deletion. Records distinguish observation, session-association, assessment, explanation, decision, result and closure; derived records are not counted as raw interactions.
 
 Proposed format v1 matching §13.1:

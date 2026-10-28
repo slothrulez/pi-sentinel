@@ -2,7 +2,7 @@
 
 ## Gate and authority
 
-- Owner requested **Phase 1 only**. Stop after planning; no application implementation until owner approves. Read PROJECT_PLAN.md, PROJECT_STATUS.md and docs/REQUIREMENTS_TRACEABILITY.md first.
+- Owner authorized **M1 only** (2026-10-29). Do not start M2 or later milestones without separate approval. Read PROJECT_PLAN.md, PROJECT_STATUS.md and docs/REQUIREMENTS_TRACEABILITY.md first.
 - Primary guide: PiSentinel-Master-Guide.pdf, 23 pages, SHA-256 a5cde730f8d99d615e017fe15d138c1e6962b634b2cad5a06b9248e0e46e20ea. Preserve guide/user data; reference physical PDF pages/sections/appendices.
 - Stable PS-* IDs never renumber. Documentation/stubs/unrun tests never satisfy application acceptance. Record exact source, command, environment, inspected result/evidence in status/traceability.
 
@@ -18,7 +18,8 @@
 
 - Windows 10 Pro 64-bit; repository D:\Projects\SENTINEL; Git Bash; Python 3.12.6, Git 2.46.0.windows.1, OpenSSH 9.8p1 and pdftotext available; ripgrep unavailable.
 - Read-only Git Bash checks: `git status --short --branch`, `git diff --check`, `python --version`, `pdftotext -layout PiSentinel-Master-Guide.pdf -`, `sha256sum PiSentinel-Master-Guide.pdf`. PowerShell digest: `Get-FileHash .\PiSentinel-Master-Guide.pdf -Algorithm SHA256`.
-- No project test/lint/build command exists yet; global pytest importability is not project setup or passing tests. Establish reproducible exact commands during M1 after approval, document actual execution.
+- Project checks (M1): `uv sync --all-extras`, `uv run pytest -q`, `uv run ruff check src tests`, `uv run ruff format --check src tests`. Linux cloud VM used for M1; Windows run still owed.
+- Chain format v1 vectors in `tests/vectors/chain_v1/` are frozen; any change needs a new chain format version.
 - Planning audit: unique requirement definitions, every core/user/optional ID in traceability, all guide sections/appendices covered, local Markdown links valid, guide digest unchanged and Git whitespace check clean. Record actual audit result.
 - Windows shell command payloads were truncated around 8 KiB during document drafting; use smaller batches and verify file tails/counts. A first oversized invocation failed without writing files; a partial planning-table write was repaired before audit.
 - If new agent/tool configuration is requested later, use `.devin/`; no unrelated environment blueprint/config during Phase 1.

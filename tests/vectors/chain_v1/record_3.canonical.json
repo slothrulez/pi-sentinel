@@ -1,0 +1,1 @@
+{"body":{"data":{"model_label":"credential_attack"},"discarded_sensitive_values":0,"refers_to":["EVT-000231","EVT-000232"],"schema_version":"pisentinel.derived.v1"},"case_id":"CASE-VEC","chain_format":"pisentinel.chain.v1","event_id":"REC-0003","record_type":"assessment","recorded_at":"2026-09-16T08:52:04.000000Z","sequence":3}

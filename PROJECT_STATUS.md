@@ -2,11 +2,11 @@
 
 ## Snapshot
 
-- **Phase:** Phase 1 planning; awaiting owner review. No implementation authorization.
+- **Phase:** M1 implemented and tested on a Linux cloud VM (owner authorized M1 only, 2026-10-29). M2+ not authorized.
 - **Inspection:** session 2026-10-28, continued after local midnight 2026-10-29 (+05:30).
 - **Baseline:** 23-page guide SHA-256 `a5cde730f8d99d615e017fe15d138c1e6962b634b2cad5a06b9248e0e46e20ea`.
 - **Initial repository:** D:\Projects\SENTINEL, branch main, no commits/tracked files; only user PDF. No existing app/rules found in repository or checked parent AGENTS paths.
-- **Application features:** none. **Project tests created/executed:** none. **Remote inventory/tests:** none. **Measured project/evaluation results:** none.
+- **Application features:** M1 only (config, Event schema, SQLite writer, hash chain, verifier, health). **Project tests:** 164 created/executed/passed on Linux; not run on Windows or Pi. **Remote inventory/tests:** none. **Measured project/evaluation results:** none.
 - **Hardware:** proposed budgets, not actual Pi measurements.
 
 ## Task status
@@ -17,7 +17,7 @@
 | M0.2 six requested documents + persistent instructions | Completed (planning documents only) | Inventory/plan/status/architecture/security/README/traceability and AGENTS.md; not application completion. |
 | M0.3 consistency audit/Git checkpoint | Completed (local planning only) | 29 audit checks and staged whitespace review PASS; initial planning commit `3c7e5f9` inspected, working tree clean afterward. Owner approval still required before M1. |
 | Read-only target inventory | Blocked: authentication | Strict batch SSH exited 255, permission denied; no remote command ran. Owner authorized access/inventory needed. |
-| M1 local config/evidence foundation | Not started; blocked on review | First implementation; acceptance in PROJECT_PLAN M1. |
+| M1 local config/evidence foundation | Implemented; tests pass on Linux. Windows run not executed | See "M1 verification" below; branch `devin/1793215090-m1-evidence-foundation`. |
 | M2 real decoys/collection | Not started | M1 and approved topology/sensor/library A01-A03. |
 | M3 sessions/features/dataset | Not started | M2 and taxonomy/windows/protocol A06-A08 frozen. |
 | M4 baseline RF | Not started | Actual independent labelled runs and leakage checks. |
@@ -54,7 +54,7 @@ Temporary visual aids are outside repository at C:\Users\HP\AppData\Local\Temp\p
 
 | ID | Blocker / risk | Impact and next action |
 |---|---|---|
-| B01 | Owner plan approval absent | Stop after Phase 1; review inventory/decisions; M1 not started. |
+| B01 | M1 authorized; M2 approval absent | Do not start M2 until owner approves. M1 Windows test run still owed (plan acceptance). |
 | B02 | SSH auth failed (A12) | Cannot verify Pi OS/architecture/storage/packages/resources. Owner arranges authorized access or shares read-only inventory; no credential search/retry. |
 | B03 | Lab topology/source allowlist/sensor absent (A01/A02) | No listeners/scans; multi-port observation/scenario A blocked until independent sensor/privacy/privilege design approved. |
 | B04 | LLM/context/cost/data choice absent (A04/A05) | Actual AI cannot be replaced with template. Need approved model and interpretation of “grounded RAG”; no cloud call made. |
@@ -64,7 +64,7 @@ Temporary visual aids are outside repository at C:\Users\HP\AppData\Local\Temp\p
 
 Security risks: hostile SSH/HTTP parsers, accidental sensitive capture, pivoting without isolation, resource/disk exhaustion, unanchored chain rewrite/truncation, prompt injection/unsupported cited claims, train/test leakage/unsafe model loading, privileged sensor design and management lockout. SECURITY defines **proposed** mitigations, not deployed controls.
 
-## Next implementation milestone — not authorized
+## M1 scope (implemented; see verification below)
 
 **M1 local config + immutable evidence foundation.** Bounded secret-safe settings/Event schema, transactional SQLite writer, deterministic chain/independent verifier, deliberate corruption/concurrency/crash tests, raw-before-enrichment persistence and actual in-process health. Read full acceptance in PROJECT_PLAN before coding. No Pi changes/listeners/AI cost necessary. Establish reproducible project dependency/test commands only after approval, rather than treating global pytest as project setup.
 
@@ -79,3 +79,29 @@ The first audit invocation had a Python quoting syntax error and did not execute
 ## Executed Git checkpoint
 
 Initial planning checkpoint: `3c7e5f93856fc8c024bf3bc00b3fab8146546879` — guide + six requested documents + AGENTS.md. Commit succeeded; inspected `git status --short --branch` showed clean `main` afterward. No push/tag/remote backup/deployment occurred. This follow-up status record documents the actual result; Git history identifies the status-record commit separately.
+
+## M1 verification (2026-10-29)
+
+Environment: Devin Linux cloud VM (Ubuntu 22.04, x86_64), not Windows, not the Pi. `uv` 0.9.5; CPython 3.12.12 (project venv), 3.10.12 and 3.11.14 (extra venvs); SQLite 3.50.4 (3.12) / 3.37.2 (system 3.10). Locked (`uv.lock`): fastapi 0.141.1, starlette 1.10.0 (1.7.0 on Python 3.10), pydantic 2.14.1, pytest 9.1.1, httpx 0.28.1, ruff 0.16.9.
+
+| Check | Command | Actual result |
+|---|---|---|
+| Setup | `uv sync --all-extras` | Environment created from `uv.lock`. |
+| Full suite (3.12) | `uv run pytest -q` | 164 passed, 1 warning (Starlette TestClient httpx deprecation, third-party). |
+| Full suite (3.10, 3.11) | `pytest -q` in separate uv venvs | 164 passed each. |
+| Repeat integration/crash/concurrency | `pytest -q tests/integration` x10 | 10/10 runs: 53 passed. |
+| Lint/format | `uv run ruff check src tests`; `uv run ruff format --check src tests` | All checks passed; formatted. |
+| Vectors | `sha256sum` over `record_N.canonical.json` + previous hash (coreutils) | Matches `tests/vectors/chain_v1/expected.json` and Python. |
+| Guide digest | `sha256sum PiSentinel-Master-Guide.pdf` | Unchanged baseline. |
+
+M1 acceptance (PROJECT_PLAN): valid config loads / unsafe settings fail without echo or import-time binding: **met**. Unicode/size/non-finite bounds: **met**. Persisted events survive reopen: **met**. Independent known-byte hashes: **met**. Content/link/insertion/interior-deletion/reordering identify broken and affected IDs: **met**. Concurrency (threads, separate connections, 4 processes) cannot fork; interrupted transaction (process exit before commit, SIGKILL mid-loop) leaves no half record; intact chain verifies: **met**. Tail truncation / full rewrite limits disclosed and tested as negative guarantees: **met** (`docs/EVIDENCE_CHAIN.md`). Raw unchanged by enrichment: **met**. Real in-process health with DB/schema/writer/storage failures: **met** (no listener). Run tests **on Windows**: **not executed** (no Windows machine in this session); owner to run `uv sync --all-extras` then `uv run pytest -q`. Pi tests: not executed by design.
+
+M1 assumptions (proposals, reviewable; not guide facts):
+- Severity vocabulary `info/low/medium/high/critical` (guide shows only `medium`).
+- Canonical form forbids floats; guide `confidence` 0.91 must later be encoded (e.g. integer basis points) by its owning milestone. Open decision for M4/M5.
+- Object keys restricted to ASCII lowercase; timestamps RFC 3339 with explicit offset, original kept plus `timestamp_utc`; writer assigns `recorded_at` (UTC).
+- One chain per case shared by observations and derived records; derived record content schemas deferred to their milestones.
+- Metadata: generic bounded structure plus credential-key denylist and secret-shape value filter (count kept). Per-service allowlists and the producer IPC adapter (A03/M2) are deferred; M1 exposes an in-process writer API only.
+- Evidence core is stdlib-only; FastAPI is an optional `api` extra used only for `GET /health`, never served in M1.
+
+Open decisions carried forward: A09 format review/freeze, checkpoint retention location and WAL-aware backup (A13/A14), float encoding, Windows verification.

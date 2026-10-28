@@ -1,0 +1,9 @@
+{
+  "description": "Chain format v1 known-byte vectors. canonical bytes are the record_N.canonical.json files (no trailing newline). current_hash values were computed with GNU coreutils sha256sum over file bytes followed by the ASCII previous_hash, independently of Python hashlib.",
+  "genesis_previous_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "records": [
+    {"file": "record_1.canonical.json", "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000", "current_hash": "967c9dd74ff2e825359de6909346078f3f3bde0bd0aa85d6c55d8570b689296f"},
+    {"file": "record_2.canonical.json", "previous_hash": "967c9dd74ff2e825359de6909346078f3f3bde0bd0aa85d6c55d8570b689296f", "current_hash": "96bfc7d20093559210a37b3c71666df81abc6439a8af25df49c43bade89de276"},
+    {"file": "record_3.canonical.json", "previous_hash": "96bfc7d20093559210a37b3c71666df81abc6439a8af25df49c43bade89de276", "current_hash": "7dadab75c508926c2ae1788e85970d0cf9a93a5daf182883375d8021b04e30ca"}
+  ]
+}

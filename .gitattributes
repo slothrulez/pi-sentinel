@@ -1,0 +1,3 @@
+# Known-byte evidence test vectors must never be line-ending converted.
+tests/vectors/** -text
+*.pdf binary
