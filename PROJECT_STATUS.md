@@ -2,11 +2,11 @@
 
 ## Snapshot
 
-- **Phase:** M1 implemented, with recorded Linux cloud VM results and owner-verified Windows results (owner authorized M1 only, 2026-10-29). M2+ not authorized.
+- **Phase:** M1 implemented; owner authorized M2-A PR1 only (2026-10-29). Additive in-process admission implemented and verified on Windows below. PR2+, live collection and later milestones are not authorized.
 - **Inspection:** session 2026-10-28, continued after local midnight 2026-10-29 (+05:30).
 - **Baseline:** 23-page guide SHA-256 `a5cde730f8d99d615e017fe15d138c1e6962b634b2cad5a06b9248e0e46e20ea`.
 - **Initial repository:** D:\Projects\SENTINEL, branch main, no commits/tracked files; only user PDF. No existing app/rules found in repository or checked parent AGENTS paths.
-- **Application features:** M1 only (config, Event schema, SQLite writer, hash chain, verifier, health). **Project tests:** 164 passed on Linux; owner-verified Windows Python 3.12.6 run: 164 passed, 0 failed, 1 Starlette deprecation warning, 17.30 seconds. **Pi inventory/tests:** not executed. **Research/resource evaluation results:** none.
+- **Application features:** M1 foundation plus M2-A PR1 in-process observation admission; no transport/service/sensor. **Project tests:** historical M1 Linux/owner Windows results retained below; this PR's latest Windows Python 3.12.6 full suite: 281 passed, 0 failed, 1 existing Starlette deprecation warning, 21.41 seconds. **Pi inventory/tests:** not executed. **Research/resource evaluation results:** none.
 - **Hardware:** proposed budgets, not actual Pi measurements.
 
 ## Task status
@@ -18,6 +18,7 @@
 | M0.3 consistency audit/Git checkpoint | Completed (local planning only) | 29 audit checks and staged whitespace review PASS; initial planning commit `3c7e5f9` inspected, working tree clean afterward. Owner approval still required before M1. |
 | Read-only target inventory | Blocked: authentication | Strict batch SSH exited 255, permission denied; no remote command ran. Owner authorized access/inventory needed. |
 | M1 local config/evidence foundation | Implemented; Linux results recorded; Windows test run verified by owner | See Linux and Windows verification below; implementation branch `devin/1793215090-m1-evidence-foundation`. Pi tests not executed. |
+| M2-A PR1 in-process admission | Implemented; Windows tests/lint/format pass; human review required | Default-deny trusted producer policy and metadata minimization before unchanged M1 writer. See M2-A PR1 verification below; feature branch `feat/m2a-pr1-observation-admission`. No merge authorized. |
 | M2 real decoys/collection | Not started | M1 and approved topology/sensor/library A01-A03. |
 | M3 sessions/features/dataset | Not started | M2 and taxonomy/windows/protocol A06-A08 frozen. |
 | M4 baseline RF | Not started | Actual independent labelled runs and leakage checks. |
@@ -42,7 +43,7 @@
 | Local hardware | PowerShell CIM/Get-PSDrive | Windows 10 Pro 10.0.19045/64-bit; 7.88 GiB RAM; i5-6200U/4 logical processors; D free 62,501,351,424 bytes at inspection. Local facts, not Pi/project benchmarks. |
 | SSH inventory attempt | BatchMode, strict host checking, 8-second timeout, one connection attempt to pisentinel@192.168.1.3 | Exit 255: Permission denied (publickey,password). Endpoint responded; target OS/identity inventory did not run. No auth retry/device change. |
 | Document write recovery | Oversized command failed, subsequent command truncated at shell payload limit | Inspected partial file, repaired only newly created planning file and continued in bounded writes; final audit verified complete core and optional tables. |
-| Application unit/integration/security/E2E | M1 tests recorded on Linux and Windows; later-milestone E2E not implemented | See Linux verification and owner-verified Windows results below. Later-milestone test paths remain planned, not executed. |
+| Application unit/integration/security/E2E | M1 results recorded; M2-A PR1 tests executed on Windows; later-milestone E2E not implemented | See dated verification sections below. Later-milestone test paths remain planned, not executed. |
 | Pi tests/load | Not executed | Auth failed; deployment not authorized. |
 | ML/SHAP/AI/evaluation | Not implemented/executed | No dataset/model/metrics/provider calls. |
 | Final documentation audit | Executed locally with inline Python assertions | PASS: 29 checks; 76 unique IDs (66 core/adopted/user + 10 optional), exact traceability set, 28 defined subtasks, M0-M10, A01-A14, links/anchor/fences, 11 routes, 14 features, seven artifacts, authorized file set and unchanged PDF. This is a documentation audit, not application tests. |
@@ -54,7 +55,7 @@ Temporary visual aids are outside repository at C:\Users\HP\AppData\Local\Temp\p
 
 | ID | Blocker / risk | Impact and next action |
 |---|---|---|
-| B01 | M1 authorized; M2 approval absent | M1 Windows test result recorded below. Do not start M2 until owner separately approves; Pi testing remains unexecuted. |
+| B01 | M2-A PR1 only authorized; further approval absent | Do not start PR2+, transports, decoys, sensors or other milestones. Feature branch/PR authorized, merge not authorized; Pi testing remains unexecuted. |
 | B02 | SSH auth failed (A12) | Cannot verify Pi OS/architecture/storage/packages/resources. Owner arranges authorized access or shares read-only inventory; no credential search/retry. |
 | B03 | Lab topology/source allowlist/sensor absent (A01/A02) | No listeners/scans; multi-port observation/scenario A blocked until independent sensor/privacy/privilege design approved. |
 | B04 | LLM/context/cost/data choice absent (A04/A05) | Actual AI cannot be replaced with template. Need approved model and interpretation of “grounded RAG”; no cloud call made. |
@@ -70,7 +71,7 @@ Security risks: hostile SSH/HTTP parsers, accidental sensitive capture, pivoting
 
 ## Completion accounting
 
-PS-U01 planning documents and the 29-check consistency audit are complete; the executed local Git checkpoint is recorded below. M1 was subsequently authorized and implemented; its Linux results and owner-verified Windows results are recorded below. Later-milestone requirements remain incomplete, Pi testing has not occurred, and M2 requires separate approval. A local planning Git checkpoint is not an independent backup, release tag, Pi deployment or completed research requirement. No push is authorized for this documentation update.
+PS-U01 planning documents and the 29-check consistency audit are complete; the executed local Git checkpoint is recorded below. M1 and subsequently M2-A PR1 were authorized and implemented; actual results are recorded below. Full M2 and later milestones remain incomplete, and Pi testing has not occurred. A local Git checkpoint is not an independent backup, release tag, Pi deployment or completed research requirement. The owner authorized this PR1 feature branch and pull request into main, but no merge or subsequent implementation.
 
 ## Audit tooling recovery
 
@@ -101,7 +102,7 @@ M1 assumptions (proposals, reviewable; not guide facts):
 - Canonical form forbids floats; guide `confidence` 0.91 must later be encoded (e.g. integer basis points) by its owning milestone. Open decision for M4/M5.
 - Object keys restricted to ASCII lowercase; timestamps RFC 3339 with explicit offset, original kept plus `timestamp_utc`; writer assigns `recorded_at` (UTC).
 - One chain per case shared by observations and derived records; derived record content schemas deferred to their milestones.
-- Metadata: generic bounded structure plus credential-key denylist and secret-shape value filter (count kept). Per-service allowlists and the producer IPC adapter (A03/M2) are deferred; M1 exposes an in-process writer API only.
+- Metadata at M1 completion: generic bounded structure plus credential-key denylist and secret-shape value filter (count kept). M2-A PR1 now adds local admission policies below; producer IPC (A03/M2) remains deferred.
 - Evidence core is stdlib-only; FastAPI is an optional `api` extra used only for `GET /health`, never served in M1.
 
 Open decisions carried forward: A09 format review/freeze, checkpoint retention location and WAL-aware backup (A13/A14), float encoding. The previously outstanding Windows test run is recorded below.
@@ -115,6 +116,31 @@ Environment: Windows, Python 3.12.6. Evidence source: the owner's verified comma
 | Setup | `uv sync --all-extras` | Succeeded. |
 | Full M1 test suite | `uv run pytest -q` | 164 passed, 0 failed, 1 Starlette deprecation warning, in 17.30 seconds. |
 
-This closes the previously owed Windows test-execution check, not the warning: it remains recorded and no fix or dependency change is claimed. No Raspberry Pi inventory, tests, deployment or resource measurements occurred. No application code or dependencies were changed for this update. M2 and later milestones remain unstarted and require separate authorization.
+This closed the previously owed Windows test-execution check, not the warning: it remained recorded and no fix or dependency change was claimed. No Raspberry Pi inventory, tests, deployment or resource measurements occurred. No application code or dependencies were changed for that documentation-only update. M2 was unstarted at that point; subsequent PR1 authorization/results are recorded below.
 
 Documentation-only update checks: inline Python audit **PASS (31 checks)** for exact results/provenance, retained requirement IDs and partial scope, unchanged Linux results, Markdown structure/links, unchanged guide digest, and two-file-only changes on the new documentation branch. `git diff --check`: **PASS**. Application test commands were not rerun.
+
+## M2-A PR1 verification (2026-10-29)
+
+Environment actually executed: Windows, Python 3.12.6, uv 0.13.6; existing project environment. Python test/lint commands used `uv run --offline --frozen --no-sync`: no dependency installation, lock update or network access for test tooling. M2-A was not executed on Linux or Raspberry Pi.
+
+Source: `src/pisentinel/edge/collector/ingest.py` (`TrustedProducerContext`, `ProducerPolicy`, `ObservationAdmission.admit`). No policies are installed implicitly. Trusted host code supplies immutable per-producer source networks, one service, event types/actions, retained integer counters and explicitly discarded metadata keys. The empty registry denies all. Unknown top-level/metadata fields, malformed retained values and disallowed observations are rejected before invoking the writer. Discard fields are removed without reading their values. The input is not mutated.
+
+Accepted observations use only `EvidenceWriter.append_observation()` and return its existing committed `AppendReceipt`. M1 validates the projected body before the writer call; the writer retains final envelope-size, duplicate-ID and transaction checks. Expected writer errors remain errors, with value-bearing exception chains/details suppressed at this boundary. There are no retries, inferred intent or generated confidence scores.
+
+| Check | Exact command | Inspected Windows result |
+|---|---|---|
+| Unchanged M1 baseline, before implementation | `uv run --offline --frozen --no-sync pytest -q` | 164 passed, 0 failed, 1 existing Starlette warning, 15.06 seconds. |
+| Focused admission unit/integration/privacy/failure tests | `uv run --offline --frozen --no-sync pytest -q tests/unit/test_admission.py tests/integration/test_admission.py tests/security/test_admission_privacy.py` | 117 passed, 0 failed, 2.88 seconds. |
+| Full regression suite, publication rerun of final implementation | `uv run --offline --frozen --no-sync pytest -q` | 281 passed, 0 failed, 1 existing Starlette deprecation warning, 21.41 seconds. |
+| Lint | `uv run --offline --frozen --no-sync ruff check src tests` | All checks passed. |
+| Formatting | `uv run --offline --frozen --no-sync ruff format --check src tests` | 35 files already formatted. |
+| Whitespace, publication rerun | `git diff --check` | Passed, no whitespace errors. |
+
+Acceptance exercised: authorized synthetic `auth_failure`; returned receipt matches a committed row visible to a separate DB connection; reopen/continue/verify; default-deny and producer isolation; IPv4/IPv6 policy; malformed/unexpected fields; counter bounds and minimization; secret canaries absent from DB/WAL/SHM/logs/rendered diagnostics; duplicate/size rejection; closed/read-only/locked/full SQLite and injected pre-commit rollback failures. Tests are in the three admission test files above; shared synthetic setup is `tests/admission_helpers.py`. Original M1 tests, source, schema, canonicalization/hash format, dependencies and frozen vectors are unchanged.
+
+Development checks initially found the intentionally missing collector module (test-first collection failure) and formatting/line-length issues; corrected before final passing runs. An intermediate full suite also passed (265 tests before additional policy/edge cases); the final 281-test result supersedes it.
+
+Publication review: no implementation/test code was rewritten. Scope audit passed for exactly eight intended files, unchanged original M1 source/tests/config/dependencies/schema/vectors/guide, one observation-writer call and no transport/CLI/derived-record implementation. Traceability audit passed: all 76 stable IDs retained, only six intended evidence rows updated, deferred scopes still incomplete; edited Markdown tables/links/anchors and guide digest passed. The supplementary audit initially hit Windows default decoding on Git UTF-8 output; rerunning the read-only inspection with explicit UTF-8 passed. This was an inspection-tool error, not an application test failure.
+
+Limits: context is supplied by trusted in-process code, not authenticated IPC or a sandbox; source claims are not independently observed. Only explicitly configured integer metadata counters are retained, not usernames/free text. M1's `discarded_sensitive_values` counts only its own schema filtering, not this admission projection. Opaque identifiers/counter semantics still require trustworthy producers; recognized-secret checks are defense in depth, not a universal secret detector. M1 hash-chain/checkpoint limitations remain. Transport, CLI/replay, rate/storage lifecycle, backups/checkpoints, decoys/sensors, resource measurements and all Pi work remain unimplemented/unexecuted and unapproved in PR1.
